@@ -3,6 +3,7 @@ node_modules/
 
 # 環境変数などの秘密ファイル
 .env
+config.json
 
 # npm のログファイル
 npm-debug.log*

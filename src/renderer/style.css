@@ -1,92 +1,346 @@
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    color: #e0e0e0;
-    background: rgba(15, 15, 15, 0.9);
-    border: 1px solid rgba(0, 255, 150, 0.5);
-    border-radius: 15px;
-    overflow: hidden;
-    /* bodyのdragを一旦解除して安定させる */
-    -webkit-app-region: no-drag;
-    width: 300px;
-    display: flex;
-    flex-direction: column;
+/**
+ * @fileoverview デスクトップ・システムモニター：スタイル定義
+ * @description ゲーミング・ネオンテーマ。透過背景とグローエフェクトによるサイバーデザイン。
+ */
+
+:root {
+    /* --- Colors --- */
+    --primary: #00ff96;
+    --primary-glow: rgba(0, 255, 150, 0.6);
+    --accent: #ff00ea;
+    /* サブアクセントカラー（必要に応じて） */
+
+    /* --- Backgrounds --- */
+    /* 背景色に変数を使用 */
+    --bg-main: rgba(10, 10, 10, var(--bg-opacity));
+    --bg-header: rgba(0, 0, 0, 0.3);
+    --bg-input: rgba(255, 255, 255, 0.05);
+
+    /* --- Borders & Effects --- */
+    --border: rgba(0, 255, 150, 0.3);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+
+    /* --- Typography --- */
+    --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --text: #e0e0e0;
+
+    /* 背景透過度の初期値 (0.85 = 85%) */
+    --bg-opacity: 0.85;
+
 }
 
-/* ヘッダー：ここをドラッグ専用ハンドルにする */
+/* -------------------------------------------------------------------------- */
+/* 1. Base Structure (ウィンドウのリサイズに直結する設定)
+/* -------------------------------------------------------------------------- */
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    /* Electronの透過ウィンドウを活かす */
+    overflow: hidden;
+    /* スクロールバーによる余計な幅を防止 */
+    font-family: var(--font-family);
+    color: var(--text);
+    /* 重要: 固定高さを排除。中身に合わせて縮むように設定 */
+    height: auto !important;
+    min-height: 0 !important;
+}
+
+.widget-body {
+    width: 300px;
+    /* ウィジェットの基本幅を固定 */
+    background: var(--bg-main);
+    border: 1px solid var(--primary-glow);
+    box-shadow: var(--glass-shadow);
+    /* * 重要: inline-block にすることで、要素のサイズが
+     * 「中身（タブ+コンテンツ）」の合計値にピタッと吸着します。
+     */
+    display: inline-block;
+    -webkit-app-region: no-drag;
+    backdrop-filter: blur(8px);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. Header & Navigation (ドラッグ可能エリア)
+/* -------------------------------------------------------------------------- */
+
 .header {
     display: flex;
-    background: rgba(0, 0, 0, 0.6);
-    /* 少し濃くして視認性アップ */
-    border-bottom: 1px solid rgba(0, 255, 150, 0.2);
     align-items: center;
-    /* ここがキモ！ヘッダー全体をドラッグ可能にする */
+    height: 36px;
+    background: var(--bg-header);
+    border-bottom: 1px solid var(--border);
     -webkit-app-region: drag;
-    height: 40px;
-    /* 高さを固定して掴みやすくする */
-    user-select: none;
+    /* ヘッダー部分を掴んで移動可能に */
 }
 
 .tabs {
     display: flex;
     flex: 1;
     height: 100%;
+    padding-left: 10px;
 }
 
 .tab-btn {
-    flex: 1;
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    padding: 0 12px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all 0.25s ease;
+    -webkit-app-region: no-drag;
+    /* ボタン上はドラッグ不可 */
+}
+
+.tab-btn:hover {
+    opacity: 0.8;
+}
+
+.tab-btn.active {
+    opacity: 1;
+    color: var(--primary);
+    box-shadow: inset 0 -2px 0 var(--primary);
+    /* アクティブ時の下線 */
+}
+
+.close-btn {
+    width: 36px;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 10px;
-    font-weight: bold;
     cursor: pointer;
+    font-size: 16px;
     opacity: 0.4;
     transition: 0.2s;
-    /* ボタンの上ではドラッグを解除しないとクリックできない */
     -webkit-app-region: no-drag;
 }
 
-/* 閉じるボタンもドラッグ解除 */
-.close-btn {
-    padding: 0 15px;
-    cursor: pointer;
-    color: #666;
-    -webkit-app-region: no-drag;
-    font-size: 18px;
+.close-btn:hover {
+    opacity: 1;
+    color: #ff4b4b;
+    background: rgba(255, 75, 75, 0.1);
 }
 
-/* コンテンツエリア：非表示の時は高さを0にする */
+/* -------------------------------------------------------------------------- */
+/* 3. Main Content Areas
+/* -------------------------------------------------------------------------- */
+
 .content {
-    padding: 15px;
+    padding: 18px;
     display: none;
-    /* これで余白が消える */
-    -webkit-app-region: no-drag;
+    /* 初期は隠す */
 }
 
 .content.active {
     display: block;
+    /* 切り替え時に表示 */
+    animation: slideUp 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* ゲージのデザイン（ゲーミンググリーン） */
+/* -------------------------------------------------------------------------- */
+/* 4. Meter Section (Monitor Display)
+/* -------------------------------------------------------------------------- */
+
+.monitor-item {
+    margin-bottom: 15px;
+}
+
+.monitor-item:last-child {
+    margin-bottom: 0;
+}
+
+.label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
 .bar-bg {
     width: 100%;
+    height: 4px;
+    /* スリム化してよりモダンに */
     background: rgba(255, 255, 255, 0.1);
-    height: 6px;
-    border-radius: 3px;
-    margin-top: 5px;
+    border-radius: 2px;
+    overflow: hidden;
 }
 
 .bar-fill {
     height: 100%;
-    background: #00ff96;
-    box-shadow: 0 0 8px rgba(0, 255, 150, 0.6);
-    border-radius: 3px;
-    transition: 0.3s ease;
+    background: var(--primary);
+    box-shadow: 0 0 10px var(--primary-glow);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.6s cubic-bezier(0.1, 0.7, 0.1, 1);
 }
 
-.label {
-    font-size: 10px;
+/* -------------------------------------------------------------------------- */
+/* 5. Settings Section (Form UI)
+/* -------------------------------------------------------------------------- */
+
+.settings-group {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 11px;
+    color: #aaa;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border: 1px solid var(--primary);
+    background: transparent;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.checkbox-wrapper input[type="checkbox"]:checked {
+    background: var(--primary);
+    box-shadow: 0 0 8px var(--primary-glow);
+}
+
+.input-wrapper input {
+    width: 100%;
+    background: var(--bg-input);
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 8px 6px;
+    color: #fff;
+    font-size: 11px;
+    box-sizing: border-box;
+    transition: 0.3s;
+}
+
+.input-wrapper input:focus {
+    outline: none;
+    border-bottom: 1px solid var(--primary);
+    background: rgba(0, 255, 150, 0.05);
+}
+
+.divider {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin: 20px 0;
+}
+
+.save-btn {
+    width: 100%;
+    padding: 8px;
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.save-btn:hover {
+    background: var(--primary);
+    color: #000;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 6. Mail Section (Scrolling Animation)
+/* -------------------------------------------------------------------------- */
+
+.mail-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    /* 少し小さくするとよりモダンに */
+    color: var(--primary);
+    margin-bottom: 8px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.mail-time {
+    font-weight: bold;
+    color: #888;
+    /* 時間は少し暗めにして件名を際立たせる */
+    min-width: 35px;
+    font-family: 'Courier New', monospace;
+    /* 数字を見やすく */
+}
+
+/* --- Mail Section 修正版 --- */
+
+.mail-scroll-box {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    /* 左寄せを確実にするため */
+    align-items: center;
+}
+
+.mail-subject-scroll {
+    display: inline-block;
+    white-space: nowrap;
+    padding-right: 50px;
+    /* 流れる時、末尾に少し余白を作る */
+    width: max-content;
+    /* 中身の幅に合わせる */
+
+    /* アニメーション設定 */
+    /* 10sは速度。 linearは等速。 infiniteは無限ループ */
+    animation: mail-marquee 10s linear infinite;
+
+    /* 【重要】短い時に動かさない魔法の1行 */
+    /* ボックスより短い場合はアニメーションを無効化する設定（JS併用が確実ですが、CSSでも擬似的に制御可能） */
+}
+
+/* アニメーション：左からスタートして、自分の幅分だけ左に消えていく */
+@keyframes mail-marquee {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* 短いメールが勝手に動くのを防ぐ（ホバー時以外は止める等の制御が不要なら、JS側で「長い時だけクラス付与」がスマートです） */
+/* マウスを乗せた時に一時停止させる（読みやすくするため） */
+.mail-row:hover .mail-subject-scroll {
+    animation-play-state: paused;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Animations
+/* -------------------------------------------------------------------------- */
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
