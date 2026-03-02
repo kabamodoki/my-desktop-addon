@@ -1,0 +1,92 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    color: #e0e0e0;
+    background: rgba(15, 15, 15, 0.9);
+    border: 1px solid rgba(0, 255, 150, 0.5);
+    border-radius: 15px;
+    overflow: hidden;
+    /* bodyのdragを一旦解除して安定させる */
+    -webkit-app-region: no-drag;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ヘッダー：ここをドラッグ専用ハンドルにする */
+.header {
+    display: flex;
+    background: rgba(0, 0, 0, 0.6);
+    /* 少し濃くして視認性アップ */
+    border-bottom: 1px solid rgba(0, 255, 150, 0.2);
+    align-items: center;
+    /* ここがキモ！ヘッダー全体をドラッグ可能にする */
+    -webkit-app-region: drag;
+    height: 40px;
+    /* 高さを固定して掴みやすくする */
+    user-select: none;
+}
+
+.tabs {
+    display: flex;
+    flex: 1;
+    height: 100%;
+}
+
+.tab-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0.4;
+    transition: 0.2s;
+    /* ボタンの上ではドラッグを解除しないとクリックできない */
+    -webkit-app-region: no-drag;
+}
+
+/* 閉じるボタンもドラッグ解除 */
+.close-btn {
+    padding: 0 15px;
+    cursor: pointer;
+    color: #666;
+    -webkit-app-region: no-drag;
+    font-size: 18px;
+}
+
+/* コンテンツエリア：非表示の時は高さを0にする */
+.content {
+    padding: 15px;
+    display: none;
+    /* これで余白が消える */
+    -webkit-app-region: no-drag;
+}
+
+.content.active {
+    display: block;
+}
+
+/* ゲージのデザイン（ゲーミンググリーン） */
+.bar-bg {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    height: 6px;
+    border-radius: 3px;
+    margin-top: 5px;
+}
+
+.bar-fill {
+    height: 100%;
+    background: #00ff96;
+    box-shadow: 0 0 8px rgba(0, 255, 150, 0.6);
+    border-radius: 3px;
+    transition: 0.3s ease;
+}
+
+.label {
+    font-size: 10px;
+    display: flex;
+    justify-content: space-between;
+}

@@ -1,0 +1,30 @@
+# node_modules は絶対に無視！
+node_modules/
+
+# 環境変数などの秘密ファイル
+.env
+
+# npm のログファイル
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OSごとの不要ファイル
+.DS_Store
+Thumbs.db
+
+# エディタの設定ファイル（VSCodeなど）
+.vscode/
+.idea/
+
+# ビルド成果物（TypeScriptやBabelなど）
+dist/
+build/
+out/
+
+# テストのカバレッジレポート
+coverage/
+
+# lockファイル（必要に応じて）
+# package-lock.json
+# yarn.lock

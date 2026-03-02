@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Desktop Addon</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="header">
+        <div class="tabs">
+            <div id="btn-meter" class="tab-btn active" onclick="showTab('meter')">METER</div>
+            <div id="btn-settings" class="tab-btn" onclick="showTab('settings')">SETTINGS</div>
+        </div>
+        <div class="close-btn" onclick="closeApp()">×</div>
+    </div>
+
+    <div id="meter" class="content active">
+        <div id="cpu-sec" class="monitor-item">
+            <div class="label">CPU <span id="cpu-val" class="percent">0%</span></div>
+            <div class="bar-bg">
+                <div id="cpu-bar" class="bar-fill"></div>
+            </div>
+        </div>
+        <div id="mem-sec" class="monitor-item">
+            <div class="label">RAM <span id="mem-val" class="percent">0%</span></div>
+            <div class="bar-bg">
+                <div id="mem-bar" class="bar-fill" style="background: #50e3c2;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="settings" class="content">
+        <div class="settings-group">
+            <label><input type="checkbox" id="cpu-check" checked> CPUを表示する</label><br>
+            <label><input type="checkbox" id="mem-check" checked> メモリを表示する</label>
+        </div>
+        <div class="settings-group">
+            <input type="text" id="email-input" placeholder="Email (IMAP)">
+            <input type="password" id="pass-input" placeholder="App Password">
+        </div>
+        <button class="save-btn" onclick="saveConfig()">SAVE CONFIG</button>
+    </div>
+
+    <script src="uiManager.js"></script>
+</body>
+
+</html>
