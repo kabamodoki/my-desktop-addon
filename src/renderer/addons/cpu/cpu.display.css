@@ -1,0 +1,53 @@
+/**
+ * @fileoverview CPUモニタリング表示スタイル
+ * @description 小型化し水平に配置したネオン風ゲージUI定義
+ */
+.cpu-hud-box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.cpu-hud-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-bottom: 2px;
+}
+
+.cpu-hud-title {
+    color: var(--neon-green);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-shadow: 0 0 3px var(--neon-green);
+}
+
+.cpu-hud-value {
+    color: var(--neon-green);
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1;
+    text-shadow: 0 0 5px var(--neon-green);
+}
+
+.cpu-hud-gauge-bg {
+    height: 6px;
+    background: rgba(0, 30, 0, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.1) inset;
+}
+
+.cpu-hud-gauge-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--neon-green);
+    box-shadow: 0 0 8px var(--neon-green);
+    transition: width 0.3s ease-out;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 3px;
+}

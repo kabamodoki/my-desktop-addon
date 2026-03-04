@@ -1,96 +1,22 @@
 <!DOCTYPE html>
-<html lang="ja">
-
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
-    <title>Desktop System Monitor</title>
     <link rel="stylesheet" href="style.css">
 </head>
+<body>
+    <div class="widget-container">
+        <nav class="tab-bar">
+            <button id="btn-display" class="tab-btn active">DISPLAY</button>
+            <button id="btn-settings" class="tab-btn">SETTINGS</button>
+            <button id="btn-close" class="close-btn">&times;</button>
+        </nav>
 
-<body class="widget-body">
-    <div id="app-root">
-
-        <header class="header">
-            <nav class="tabs" role="tablist">
-                <button id="btn-meter" class="tab-btn active" role="tab" aria-selected="true" aria-controls="meter">
-                    METER
-                </button>
-                <button id="btn-settings" class="tab-btn" role="tab" aria-selected="false" aria-controls="settings">
-                    SETTINGS
-                </button>
-            </nav>
-            <div id="close-app" class="close-btn" title="終了" role="button">×</div>
-        </header>
-
-        <main class="container">
-
-            <section id="meter" class="content active" role="tabpanel" aria-labelledby="btn-meter">
-                <article id="cpu-sec" class="monitor-item">
-                    <header class="label">
-                        <span>CPU</span>
-                        <span id="cpu-val" class="percent">0%</span>
-                    </header>
-                    <div class="bar-bg">
-                        <div id="cpu-bar" class="bar-fill" style="width: 0%;"></div>
-                    </div>
-                </article>
-
-                <article id="mem-sec" class="monitor-item">
-                    <header class="label">
-                        <span>RAM</span>
-                        <span id="mem-val" class="percent">0%</span>
-                    </header>
-                    <div class="bar-bg">
-                        <div id="mem-bar" class="bar-fill" style="width: 0%;"></div>
-                    </div>
-                </article>
-
-                <hr class="divider">
-                
-                <section class="monitor-item">
-                    <header class="label">
-                        <span>RECENT MESSAGES</span>
-                    </header>
-                    <div id="mail-list-container" class="mail-list-container">
-                        </div>
-                </section>
-            </section>
-
-            <section id="settings" class="content" role="tabpanel" aria-labelledby="btn-settings" aria-hidden="true">
-                <div class="settings-group">
-                    <div class="controls">
-                        <label for="opacity-range">透過度: <span id="opacity-val">100%</span></label>
-                        <input type="range" id="opacity-range" min="0.1" max="1.0" step="0.1" value="1.0">
-                    </div>
-                    <div class="checkbox-wrapper">
-                        <input type="checkbox" id="cpu-check" checked>
-                        <label for="cpu-check">CPU情報を表示</label>
-                    </div>
-                    <div class="checkbox-wrapper">
-                        <input type="checkbox" id="mem-check" checked>
-                        <label for="mem-check">メモリ情報を表示</label>
-                    </div>
-                </div>
-
-                <hr class="divider">
-
-                <div class="settings-group">
-                    <div class="input-wrapper">
-                        <input type="email" id="email-input" placeholder="Email Address (IMAP)">
-                    </div>
-                    <div class="input-wrapper">
-                        <input type="password" id="pass-input" placeholder="App Password">
-                    </div>
-                </div>
-
-                <button id="save-config" class="save-btn">SAVE CONFIG</button>
-            </section>
+        <main class="content-area">
+            <div id="display-section" class="tab-content active"></div>
+            <div id="settings-section" class="tab-content"></div>
         </main>
     </div>
-
     <script src="uiManager.js"></script>
 </body>
-
 </html>

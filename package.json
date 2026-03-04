@@ -13,6 +13,7 @@
     "electron": "^40.6.1",
     "imap": "^0.8.19",
     "mailparser": "^3.9.3",
-    "systeminformation": "^5.31.1"
+    "os-utils": "^0.0.14",
+    "systeminformation": "^5.31.2"
   }
 }
