@@ -2,19 +2,35 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <title>Neon Monitor</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="widget-container">
         <nav class="tab-bar">
-            <button id="btn-display" class="tab-btn active">DISPLAY</button>
+            <button id="btn-display" class="tab-btn">DISPLAY</button>
             <button id="btn-settings" class="tab-btn">SETTINGS</button>
-            <button id="btn-close" class="close-btn">&times;</button>
+            <button id="btn-close" class="close-btn">×</button>
         </nav>
 
         <main class="content-area">
-            <div id="display-section" class="tab-content active"></div>
-            <div id="settings-section" class="tab-content"></div>
+            <section id="display-section" class="tab-content">
+                <div id="cpu-display-container"></div>
+                <div id="memory-display-container"></div>
+            </section>
+
+            <section id="settings-section" class="tab-content">
+                <div class="settings-group">
+                    <h2 class="section-title">SYSTEM</h2>
+                    <div id="opacity-settings-container"></div>
+                </div>
+                
+                <div class="settings-group">
+                    <h2 class="section-title">ADDONS</h2>
+                    <div id="cpu-settings-container"></div>
+                    <div id="memory-settings-container"></div>
+                </div>
+            </section>
         </main>
     </div>
     <script src="uiManager.js"></script>

@@ -1,83 +1,210 @@
 /**
- * @fileoverview 共通スタイル
- * @description アプリケーション全体のレイアウトとネオングリーン基調のデザイン定義
+ * @fileoverview Neon Monitor Global Style (Adjusted)
+ * @description 視認性と発光バランスを再調整。透過背景でもUIが埋もれない設計です。
  */
+
 :root {
-    --bg-color: #000502;
-    --neon-green: #00ff00;
-    --border-color: #003300;
-    --text-dim: #008800;
+    /* --- Colors --- */
+    --bg-black: rgba(0, 5, 2, 0.95);
+    /* 透過可能なベース黒 */
+    --neon-bright: #00ff00;
+    /* 鮮やかな発光緑 */
+    --neon-dim: #008800;
+    /* 枠線用：少し明るさを引き上げ */
+    --neon-text-dim: #00aa00;
+    /* 非アクティブ文字用：コントラスト確保 */
+    --accent-white: #ffffff;
+    --alert-red: #ff0000;
+
+    /* --- Shadows & Glows --- */
+    /* 枠の発光を少し強めに変更 */
+    --glow-border: 0 0 12px rgba(0, 255, 0, 0.4);
+    --glow-text-soft: 0 0 8px rgba(0, 255, 0, 0.6);
+    --text-outline:
+        1px 1px 0px #000000,
+        -1px -1px 0px #000000,
+        1px -1px 0px #000000,
+        -1px 1px 0px #000000;
 }
 
 body {
     margin: 0;
     padding: 0;
     font-family: 'Consolas', monospace;
-    overflow: hidden;
     background: transparent;
-    color: #ffffff;
+    color: var(--accent-white);
+    overflow: hidden;
 }
 
+/* --- Layout: Container --- */
 .widget-container {
-    height: 100vh;
-    background: var(--bg-color);
-    border: 1px solid var(--neon-green);
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.2) inset;
-    box-sizing: border-box;
+    width: 350px;
+    height: 450px;
+    background-color: var(--bg-black);
+    /* 枠線を少し太く、色を明るく */
+    border: 1.5px solid var(--neon-dim);
+    box-shadow: var(--glow-border), inset 0 0 15px rgba(0, 40, 0, 0.6);
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
     -webkit-app-region: drag;
-    position: relative;
 }
 
+/* --- Layout: Tab Navigation --- */
 .tab-bar {
     display: flex;
-    background: rgba(0, 20, 0, 0.8);
-    border-bottom: 1px solid var(--neon-green);
-    -webkit-app-region: no-drag;
+    height: 45px;
+    /* 少し高さを出して押しやすく */
+    background: rgba(0, 20, 0, 0.95);
+    border-bottom: 1px solid var(--neon-dim);
 }
 
 .tab-btn {
     flex: 1;
-    padding: 8px 0;
     background: none;
     border: none;
-    color: var(--text-dim);
     cursor: pointer;
-    font-size: 10px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
+    font-family: inherit;
+    font-size: 14px;
+    /* 13pxから14pxへ拡大 */
+    font-weight: bold;
+    /* 非アクティブ時の色を明るくし、視認性を向上 */
+    color: var(--neon-text-dim);
+    letter-spacing: 2px;
+    text-shadow: var(--text-outline);
+    transition: all 0.2s ease;
+    -webkit-app-region: no-drag;
+}
+
+.tab-btn:hover {
+    color: var(--neon-bright);
+    background: rgba(0, 255, 0, 0.1);
 }
 
 .tab-btn.active {
-    color: var(--neon-green);
-    background: linear-gradient(0deg, rgba(0, 255, 0, 0.1) 0%, transparent 100%);
-    text-shadow: 0 0 5px var(--neon-green);
-}
-
-.tab-content {
-    display: none;
-    flex: 1;
-    padding: 10px;
-    -webkit-app-region: no-drag;
-    overflow-y: auto;
-}
-
-.tab-content.active {
-    display: block;
+    color: var(--neon-bright);
+    background: rgba(0, 255, 0, 0.15);
+    /* アクティブ時はしっかり発光させる */
+    text-shadow: var(--text-outline), 0 0 10px var(--neon-bright);
+    border-bottom: 2px solid var(--neon-bright);
 }
 
 .close-btn {
+    width: 45px;
     background: none;
     border: none;
-    color: var(--text-dim);
     cursor: pointer;
-    padding: 0 10px;
-    font-size: 12px;
+    font-size: 22px;
+    color: var(--neon-text-dim);
+    text-shadow: var(--text-outline);
+    transition: all 0.2s;
+    -webkit-app-region: no-drag;
 }
 
 .close-btn:hover {
-    color: #ff0000;
-    text-shadow: 0 0 8px #ff0000;
+    color: var(--alert-red);
+    text-shadow: 0 0 8px var(--alert-red);
+}
+
+/* --- Typography: Common --- */
+.neon-text,
+.label,
+.setting-label {
+    font-size: 15px;
+    font-weight: bold;
+    color: var(--neon-bright);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-shadow: var(--text-outline), var(--glow-text-soft);
+}
+
+/* --- Typography: Values --- */
+.value,
+#cpu-usage {
+    font-size: 16px;
+    color: var(--accent-white);
+    text-shadow: var(--text-outline), 0 0 10px var(--neon-bright);
+}
+
+/**
+ * @fileoverview スライダー操作の完全復旧
+ * @description ドラッグ領域を強制的に解除し、マウスイベントを通るようにします。
+ */
+
+/* 共通スライダー設定 */
+input[type="range"].neon-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    background: transparent;
+    cursor: pointer;
+    /* --- 重要：ドラッグを完全に殺して操作を優先 --- */
+    -webkit-app-region: no-drag !important;
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 999;
+    /* 重なり順を最前面に */
+}
+
+/* つまみ部分（これがないと掴めない場合があります） */
+input[type="range"].neon-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 18px;
+    width: 10px;
+    background: var(--neon-bright);
+    margin-top: -7px;
+    box-shadow: 0 0 5px var(--neon-dim);
+    /* つまみ自体もドラッグ不可に */
+    -webkit-app-region: no-drag !important;
+}
+
+/* 溝（トラック） */
+input[type="range"].neon-slider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(0, 68, 0, 0.3);
+    border: 1px solid var(--neon-dim);
+    -webkit-app-region: no-drag !important;
+}
+
+/**
+ * @fileoverview タブコンテンツの表示制御
+ */
+
+/* 初期状態はすべて非表示 */
+.tab-content {
+    display: none !important;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+/* activeクラスが付いているものだけを表示 */
+.tab-content.active {
+    display: block !important;
+}
+
+/* コンテンツエリア内のレイアウト微調整 */
+.content-area {
+    flex: 1;
+    position: relative;
+    /* 子要素の絶対配置などの基準に */
+    overflow-y: auto;
+    padding: 15px;
+}
+
+/**
+ * @fileoverview タブコンテンツの排他表示
+ */
+/* すべてのタブコンテンツを一旦強制非表示 */
+#display-section,
+#settings-section,
+.tab-content {
+    display: none !important;
+}
+
+/* activeクラスがついたものだけを強制表示 */
+#display-section.active,
+#settings-section.active,
+.tab-content.active {
+    display: block !important;
 }
